@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Countdown Site</title>
+    <title>Pera Efac Countdowns</title>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -210,8 +210,8 @@
 
     <!-- Timer 1: Project Launch -->
     <div class="timer-block green">
-        <span class="corner-tag">TIMER_01</span>
-        <div class="label"><span class="pulse-dot"></span>Project Launch In</div>
+        <span class="corner-tag">E21</span>
+        <div class="label"><span class="pulse-dot"></span>Academic Year Ends in...</div>
         <div class="countdown" id="timer1">--d --h --m --s</div>
         <div class="progress-wrap">
             <div class="progress-meta">
@@ -226,13 +226,13 @@
 
     <!-- Divider -->
     <div class="divider">
-        <span class="divider-label">// ACTIVE COUNTDOWNS</span>
+        <span class="divider-label">// Current Batches</span>
     </div>
 
     <!-- Timer 2: New Year -->
     <div class="timer-block amber">
-        <span class="corner-tag">TIMER_02</span>
-        <div class="label"><span class="pulse-dot"></span>New Year 2027 In</div>
+        <span class="corner-tag">Final Year</span>
+        <div class="label"><span class="pulse-dot"></span>Degree complete in</div>
         <div class="countdown" id="timer2">--d --h --m --s</div>
         <div class="progress-wrap">
             <div class="progress-meta">
@@ -247,13 +247,13 @@
 
     <script>
         // ── Timer 1: Project Launch — Jan 1 2027
-        const target1   = new Date("Jan 1, 2027 00:00:00").getTime();
-        const start1    = new Date("Jan 1, 2026 00:00:00").getTime(); // arbitrary start
+        const target1   = new Date("Oct 17, 2026 00:00:00").getTime();
+        const start1    = new Date("Nov 24, 2025 00:00:00").getTime(); // arbitrary start
         const totalSpan1 = target1 - start1;
 
         // ── Timer 2: Product Beta — Jun 15 2026
-        const target2   = new Date("Jun 15, 2026 00:00:00").getTime();
-        const start2    = new Date("Jan 1, 2026 00:00:00").getTime();
+        const target2   = new Date("Oct 17, 2026 00:00:00").getTime();
+        const start2    = new Date("Mar 12, 2022 00:00:00").getTime();
         const totalSpan2 = target2 - start2;
 
         function fmt(distance) {
