@@ -23,7 +23,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 40px 20px;
+            padding: 40px 20px; /* ← outer page padding: top/bottom  left/right */
         }
         body::before {
             content: '';
@@ -36,13 +36,13 @@
         }
         .stack {
             width: 100%;
-            max-width: 680px;
+            max-width: 680px; /* ← overall card width */
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 12px; /* ← outer card corner radius */
             overflow: hidden;
         }
         .timer-block {
-            padding: 36px 48px;
+            padding: 36px 48px; /* ← timer cell padding: top/bottom  left/right */
             background: var(--panel);
             position: relative;
             border-bottom: 1px solid var(--border);
@@ -53,53 +53,53 @@
             align-items: center;
             background: var(--bg);
             border-bottom: 1px solid var(--border);
-            padding: 0 48px;
-            height: 36px;
+            padding: 0 48px; /* ← divider horizontal padding (matches timer-block) */
+            height: 36px;    /* ← divider strip height */
             gap: 12px;
         }
         .divider::before, .divider::after {
             content: '';
             flex: 1;
-            height: 1px;
+            height: 1px; /* ← divider line thickness */
             background: var(--border);
         }
         .divider span {
             font-family: var(--mono);
-            font-size: 0.58rem;
+            font-size: 0.58rem;   /* ← divider label font size */
             letter-spacing: 0.2em;
             color: var(--muted);
             border: 1px solid var(--border);
-            padding: 3px 12px;
+            padding: 3px 12px;    /* ← divider pill padding: top/bottom  left/right */
             border-radius: 999px;
             white-space: nowrap;
         }
         .corner-tag {
             position: absolute;
-            top: 14px;
-            right: 20px;
+            top: 14px;   /* ← corner tag distance from top of cell */
+            right: 20px; /* ← corner tag distance from right of cell */
             font-family: var(--mono);
-            font-size: 0.6rem;
+            font-size: 0.6rem; /* ← corner tag font size */
             letter-spacing: 0.12em;
             color: var(--muted);
         }
         .label {
             font-family: var(--sans);
             font-weight: 300;
-            font-size: 0.68rem;
+            font-size: 0.68rem;    /* ← timer title font size */
             letter-spacing: 0.25em;
             text-transform: uppercase;
             color: #ffffff;
-            margin-bottom: 14px;
+            margin-bottom: 14px;   /* ← gap between title and countdown digits */
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 8px; /* ← gap between pulse dot and title text */
         }
         .pulse-dot {
-            width: 7px;
-            height: 7px;
+            width: 7px;   /* ← pulse dot width */
+            height: 7px;  /* ← pulse dot height */
             border-radius: 50%;
             flex-shrink: 0;
-            animation: pulse 1.4s ease-in-out infinite;
+            animation: pulse 1.4s ease-in-out infinite; /* ← pulse speed (seconds) */
         }
         @keyframes pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
@@ -107,22 +107,22 @@
         }
         .countdown {
             font-family: var(--mono);
-            font-size: clamp(1.8rem, 7vw, 3rem);
+            font-size: clamp(1.8rem, 7vw, 3rem); /* ← digit size: min, fluid, max */
             letter-spacing: 0.04em;
-            margin-bottom: 24px;
+            margin-bottom: 24px; /* ← gap between digits and progress bar area */
         }
         .progress-wrap { width: 100%; }
         .progress-meta {
             display: flex;
             justify-content: space-between;
             font-family: var(--mono);
-            font-size: 0.65rem;
-            color: #ffffff;
-            margin-bottom: 7px;
+            font-size: 0.65rem;  /* ← progress percentage/label font size */
+            color: var(--muted);
+            margin-bottom: 7px;  /* ← gap between meta text and bar track */
         }
         .progress-track {
             width: 100%;
-            height: 10px;
+            height: 10px; /* ← progress bar track thickness (doubled from 5px) */
             background: var(--border);
             border-radius: 999px;
             overflow: hidden;
@@ -130,11 +130,12 @@
         .progress-fill {
             height: 100%;
             border-radius: 999px;
-            transition: width 0.9s linear;
+            transition: width 0.9s linear; /* ← bar animation duration */
         }
         @media (max-width: 520px) {
-            .timer-block { padding: 28px 22px; }
-            .divider { padding: 0 22px; }
+            /* ── Mobile breakpoint ── */
+            .timer-block { padding: 28px 22px; } /* ← mobile cell padding: top/bottom  left/right */
+            .divider { padding: 0 22px; }         /* ← mobile divider padding (matches above) */
         }
     </style>
 </head>
@@ -142,6 +143,23 @@
 <div class="stack" id="stack"></div>
 
 <script>
+/* ════════════════════════════════════════════════════════════════════
+   ★  TIMER CONFIG  —  Add, remove, or edit entries here.
+   ════════════════════════════════════════════════════════════════════
+
+   Each entry needs:
+     title      – label shown above the timer
+     tag        – small corner label (e.g. batch name or ID)
+     start      – when the period began  (used for progress bar %)
+     end        – the deadline you're counting down to
+     color      – any CSS color for the digits + bar glow
+     divider    – text shown in a separator BEFORE this timer
+                  set to "" to show no divider above it
+
+   DATE FORMAT: "Month Day, Year HH:MM:SS"
+   e.g.  "Sep 1, 2025 08:00:00"
+   ════════════════════════════════════════════════════════════════════ */
+
 const TIMERS = [
     {
         title:   "Current Academic Year Ends In",
@@ -152,15 +170,7 @@ const TIMERS = [
         divider: ""
     },
     {
-        title:   "Current Semester Ends In",
-        tag:     "CNTDN 02",
-        start:   "Apr 27, 2025 08:00:00",
-        end:     "Oct 16, 2026 17:00:00",
-        color:   "#00e676",
-        divider: ""
-    },
-    {
-        title:   "E20 Completion in:",
+        title:   "E20 Graduation In",
         tag:     "Final Year",
         start:   "Mar 23, 2022 08:00:00",
         end:     "Oct 16, 2026 17:00:00",
@@ -168,7 +178,7 @@ const TIMERS = [
         divider: "// CURRENT BATCHES"
     },
     {
-        title:   "E21 Completion in:",
+        title:   "E21 Graduation In",
         tag:     "3rd Year",
         start:   "Mar 23, 2023 08:00:00",
         end:     "Oct 16, 2027 17:00:00",
@@ -176,7 +186,7 @@ const TIMERS = [
         divider: ""
     },
     {
-        title:   "E22 Completion in:",
+        title:   "E22 Graduation In",
         tag:     "2nd Year",
         start:   "Mar 23, 2024 08:00:00",
         end:     "Oct 16, 2028 09:00:00",
@@ -184,7 +194,7 @@ const TIMERS = [
         divider: ""
     },
     {
-        title:   "E23 Completion in:",
+        title:   "E23 Graduation In",
         tag:     "2nd Year",
         start:   "Aug 23, 2024 08:00:00",
         end:     "Oct 16, 2029 12:00:00",
@@ -192,6 +202,10 @@ const TIMERS = [
         divider: ""
     },
 ];
+
+/* ════════════════════════════════════════════════════════════════════
+   ★  END OF CONFIG  —  No need to edit anything below this line
+   ════════════════════════════════════════════════════════════════════ */
 
 function buildUI() {
     const stack = document.getElementById('stack');
@@ -231,6 +245,7 @@ function buildUI() {
 function fmt(ms) {
     if (ms < 0) return null;
 
+    // Use real calendar dates so months/years are accurate (months vary in length)
     const now = new Date();
     const end = new Date(now.getTime() + ms);
 
@@ -238,13 +253,11 @@ function fmt(ms) {
     let months = end.getMonth()    - now.getMonth();
     if (months < 0) { years--; months += 12; }
 
+    // Advance a copy of now by the extracted years+months, then measure the leftover
     const pivot = new Date(now);
     pivot.setFullYear(pivot.getFullYear() + years);
     pivot.setMonth(pivot.getMonth() + months);
-
-    // Clamp to zero: month-length differences can cause pivot to slightly
-    // overshoot end, which would otherwise produce negative d/h/m/s values.
-    const leftover = Math.max(0, end - pivot);
+    const leftover = end - pivot; // remaining milliseconds after whole years+months
 
     const d = Math.floor(leftover / 86400000);
     const h = Math.floor((leftover % 86400000) / 3600000);
@@ -252,8 +265,9 @@ function fmt(ms) {
     const s = Math.floor((leftover % 60000)    / 1000);
 
     const parts = [];
+    // Only prepend years / months when they're non-zero
     if (years  > 0) parts.push(`${String(years).padStart(2,'0')}y`);
-    if (months > 0 || years > 0) parts.push(`${String(months).padStart(2,'0')}mo`);
+    if (months > 0 || years > 0) parts.push(`${String(months).padStart(2,'0')}mo`); // always show mo when years is shown
     parts.push(
         `${String(d).padStart(2,'0')}d`,
         `${String(h).padStart(2,'0')}h`,
