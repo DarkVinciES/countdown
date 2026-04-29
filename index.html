@@ -257,7 +257,7 @@ function fmt(ms) {
     const pivot = new Date(now);
     pivot.setFullYear(pivot.getFullYear() + years);
     pivot.setMonth(pivot.getMonth() + months);
-    const leftover = end - pivot; // remaining milliseconds after whole years+months
+    const leftover = Math.max(0, end - pivot); // remaining milliseconds after whole years+months
 
     const d = Math.floor(leftover / 86400000);
     const h = Math.floor((leftover % 86400000) / 3600000);
